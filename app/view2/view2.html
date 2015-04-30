@@ -1,5 +1,102 @@
-<p>This is the partial for view 2.</p>
-<p>
-  Showing of 'interpolate' filter:
-  {{ 'Current version is v%VERSION%.' | interpolate }}
-</p>
+<p>Queue Formations</p>
+<div class="col-md-4" id="left-queue">
+	<h2>Select User</h2>
+	<input type="checkbox" ng-model="applicationFilters.approved"/>Approved<br>
+	Filter People by matching string:
+	<input ng-model="matchingPerson"><br>
+	Select User
+	<!--order the select user by: "date approved" and by "lowest queue count"-->
+	<select ng-model="daUser" ng-options="user.name for user in users | applicationStatus:applicationFilters | filter:matchingPerson" ng-change="setQueue(30); setupSelectedUser(daUser); setQueueUsers()">
+	</select>
+	<p>User Name: {{daUser.name}}</p>
+	<p>Hometown: {{daUser.hometown}}</p>
+	<p>Application Status: {{daUser.appStatus}}</p>
+	<p>Education:</p>
+	<ul>
+		<li ng-repeat="education in daUser.educations">
+			{{education.degree}} in {{education.major}}, {{education.school}}, {{education.startYear}}-{{education.endYear}}
+		</li>
+	</ul>
+	<p>Jobs:</p>
+	<ul>
+		<li ng-repeat="job in daUser.jobs">
+			{{job.role}}@{{job.company}}, {{job.startYear}}-{{job.endYear}}
+		</li>
+	</ul>
+	<p>Experience/Knowledge:</p>
+	<ul>
+		<li ng-repeat="experience in daUser.experiences">
+			{{experience}}
+		</li>
+	</ul>
+	<p>Wants: </p>
+	<ul>
+		<li ng-repeat="want in daUser.wants">
+			{{want}}
+		</li>
+	</ul>
+	<!-- add in break the ice here-->
+	<p>Break The Ices:</p>
+	<ul>
+		<li ng-repeat="breakTheIce in daUser.breakTheIces">
+			{{breakTheIce}}
+		</li>
+	</ul>
+	<p>Referred By: {{daUser.referredBy}}</p>
+	<!--button for submit here - keep in mind what will happen when someone submits a queue with empty slots at the end-->
+	<button ng-click="submitQueue()">Submit Queue</button>
+</div>
+
+<div class="col-md-4" id="center-queue">
+	<h2>Fill Queue</h2>
+	<p>Set length(days)</p>
+	<select ng-model="queueLength" ng-change="setQueue(queueLength)">
+		<option ng-repeat="n in [] | range:30">{{n + 1}}</option>
+	</select><br>
+	<div ng-model="queue">
+		<div ng-model = "queue[$index]" ng-repeat="n in [] | range:queueLength" class="queue-entry">
+			<p>{{queue[$index].date}}</p><label ng-class="queue[$index].clicked" ng-Click="labelClicked($index)">{{queue[$index].user.name}}</label>
+			<button ng-click="removeFromQueue($index)">Remove From Queue</button>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-4" id="right-queue">
+	<h2>Queue Choices</h2>
+	<input ng-model="queuePerson"><br>
+	<p>cannot do {{notDate}}</p>
+	<p>cannot do mutual friends</p>
+	<p>cannot do [some set of users that a person has already been matched with]</p>
+	<p>also do: add in OR and AND logic for string terms</p>
+	<ul>
+		<li ng-repeat="user in eligibleUsers()">
+			{{user.name}} <br>
+			{{user.hometown}} <br>
+			<button ng-click="putInQueue(user)">Put In Queue</button>
+		</li>
+	</ul>
+	<!--need below to be based off of the current date highlighted... so that date needs to be accessible-->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

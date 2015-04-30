@@ -1,1 +1,53 @@
-<p>This is the partial for view 1.</p>
+<p>Application Approvals</p>
+<!--filter for type of person: "unseen", "all", "told to wait"-->
+Filter People by matching string:
+<input ng-model="matchingPerson"><br>
+Application Statuses:
+	<input type="checkbox" ng-model="applicationFilters.unprocessed"/>Unprocessed
+	<input type="checkbox" ng-model="applicationFilters.waitlisted"/>Waitlisted
+	<input type="checkbox" ng-model="applicationFilters.approved"/>Approved
+	<!-- add in "was Referred" checkbox -->
+	<br>
+<!--person selection-->
+Select Person:
+<select ng-model="daUser" ng-options="user.name for user in users | applicationStatus:applicationFilters | filter:matchingPerson">
+</select>
+<p>User Name: {{daUser.name}}</p>
+<p>Hometown: {{daUser.hometown}}</p>
+<p>Application Status: {{daUser.appStatus}}</p>
+<p>Education:</p>
+<ul>
+	<li ng-repeat="education in daUser.educations">
+		{{education.degree}} in {{education.major}}, {{education.school}}, {{education.startYear}}-{{education.endYear}}
+	</li>
+</ul>
+<p>Jobs:</p>
+<ul>
+	<li ng-repeat="job in daUser.jobs">
+		{{job.role}}@{{job.company}}, {{job.startYear}}-{{job.endYear}}
+	</li>
+</ul>
+<p>Experience/Knowledge:</p>
+<ul>
+	<li ng-repeat="experience in daUser.experiences">
+		{{experience}}
+	</li>
+</ul>
+<p>Wants: </p>
+<ul>
+	<li ng-repeat="want in daUser.wants">
+		{{want}}
+	</li>
+</ul>
+<!-- add in break the ice here-->
+<p>Break The Ices:</p>
+<ul>
+	<li ng-repeat="breakTheIce in daUser.breakTheIces">
+		{{breakTheIce}}
+	</li>
+</ul>
+<p> Put a HAS REFERRED list here </p>
+<p>Referred By: {{getReferredByName(daUser.referredBy)}}</p>
+<button ng-click="approve()">APPROVE</button>
+<!-- be able to propagate the approved's over to the queue immediately (not sure if this is something to do once the whole thing is ready) -->
+<button ng-click="putOnWaitlist()">WAITLIST</button>
